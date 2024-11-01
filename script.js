@@ -18,23 +18,42 @@ const renderer = new THREE.WebGLRenderer({canvas});
 renderer.setSize(sizes.width, sizes.height);
 renderer.setClearColor(0xf5f5dc); // Beige color
 
-//Mesh
+// Define colors for each face
+const faceColors = [
+    0xff0000, // Red
+    0x00ff00, // Green
+    0x0000ff, // Blue
+    0xffff00, // Yellow
+    0xff00ff, // Magenta
+    0x00ffff  // Cyan
+];
+
+// Create an array of materials
+const materials = faceColors.map(color => new THREE.MeshBasicMaterial({ color }));
+
+// Create geometry
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({color: 0x800080});
-const mesh = new THREE.Mesh(geometry, material);
+
+// Assign materials to each face
+for (let i = 0; i < geometry.groups.length; i++) {
+    geometry.groups[i].materialIndex = i;
+}
+
+// Create the mesh with the geometry and materials
+const mesh = new THREE.Mesh(geometry, materials);
 scene.add(mesh);
 
-//Outline
+// Outline
 const edges = new THREE.EdgesGeometry(geometry);
 const lineMaterial = new THREE.LineBasicMaterial({color: 0xccff66});
 const outline = new THREE.LineSegments(edges, lineMaterial);
 scene.add(outline);
 
-//Orbit Controls
+// Orbit Controls
 const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;	
+controls.enableDamping = true;
 
-//Animation
+// Animation
 const tick = () => {
     controls.update();
     renderer.render(scene, camera);
