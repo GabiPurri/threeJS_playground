@@ -52,6 +52,7 @@ scene.add(outline);
 // Orbit Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
+camera.lookAt(mesh.position);
 
 // Animation
 const tick = () => {
