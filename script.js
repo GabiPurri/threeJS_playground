@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
+
+
 
 //Scene
 const scene = new THREE.Scene();
@@ -27,5 +30,15 @@ const lineMaterial = new THREE.LineBasicMaterial({color: 0xccff66});
 const outline = new THREE.LineSegments(edges, lineMaterial);
 scene.add(outline);
 
-//Render
-renderer.render(scene, camera);
+//Orbit Controls
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;	
+
+//Animation
+const tick = () => {
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+}
+
+tick();
