@@ -54,8 +54,14 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 camera.lookAt(mesh.position);
 
+//Clock
+const clock = new THREE.Clock();
+
 // Animation
 const tick = () => {
+    const elapsedTime = clock.getElapsedTime();
+    mesh.rotation.y = elapsedTime; //Rotate based on time
+    outline.rotation.y = elapsedTime; //Rotate based on time
     controls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
