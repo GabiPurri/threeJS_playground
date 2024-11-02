@@ -6,15 +6,55 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 //Scene
 const scene = new THREE.Scene();
 
+//Sizes
+const sizes = { width: window.innerWidth, height: window.innerHeight };
+
+//Resize
+window.addEventListener('resize', () => {
+
+    //Update sizes
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    //Update camera
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+
+    //Update renderer
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); //accounts for when people move the window to a different screen.
+});
+
+//Listen for double click
+window.addEventListener('dblclick', () => {
+
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+
+    if (!fullscreenElement) {
+
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        } else if (canvas.webkitRequestFullscreen) {
+            canvas.webkitRequestFullscreen();
+        }
+
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+});
+
 //Camera
-const sizes = {width: 800, height: 600};
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
 camera.position.z = 3;
 scene.add(camera);
 
 //Renderer
 const canvas = document.querySelector('canvas.webgl');
-const renderer = new THREE.WebGLRenderer({canvas});
+const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setClearColor(0xf5f5dc); // Beige color
 
@@ -45,7 +85,7 @@ scene.add(mesh);
 
 // Outline
 const edges = new THREE.EdgesGeometry(geometry);
-const lineMaterial = new THREE.LineBasicMaterial({color: 0xccff66});
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0xccff66 });
 const outline = new THREE.LineSegments(edges, lineMaterial);
 scene.add(outline);
 
