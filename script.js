@@ -56,7 +56,21 @@ scene.add(camera);
 const canvas = document.querySelector('canvas.webgl');
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(sizes.width, sizes.height);
-renderer.setClearColor(0xf5f5dc); // Beige color
+renderer.setClearColor(0x292929); 
+
+
+//Custom, random triangles using Buffer Geometry
+const geometry = new THREE.BufferGeometry();
+
+const count = 35; // Number of triangles
+const positionsArray = new Float32Array(count * 3 * 3);
+
+for (let i = 0; i < count * 3 * 3; i++) {
+    positionsArray[i] = (Math.random() - 0.5) * 4;
+}
+
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+geometry.setAttribute('position', positionsAttribute);
 
 // Define colors for each face
 const faceColors = [
@@ -69,10 +83,10 @@ const faceColors = [
 ];
 
 // Create an array of materials
-const materials = faceColors.map(color => new THREE.MeshBasicMaterial({ color }));
+const materials = faceColors.map(color => new THREE.MeshBasicMaterial({ color}));
 
 // Create geometry
-const geometry = new THREE.BoxGeometry(1, 1, 1);
+//const geometry = new THREE.BoxGeometry(1, 1, 1);
 
 // Assign materials to each face
 for (let i = 0; i < geometry.groups.length; i++) {
