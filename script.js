@@ -9,6 +9,9 @@ const scene = new THREE.Scene();
 //Sizes
 const sizes = { width: window.innerWidth, height: window.innerHeight };
 
+
+
+
 //Resize
 window.addEventListener('resize', () => {
 
@@ -50,58 +53,60 @@ window.addEventListener('dblclick', () => {
 //Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
 camera.position.z = 3;
+camera.position.y = 2;
 scene.add(camera);
 
 //Renderer
 const canvas = document.querySelector('canvas.webgl');
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(sizes.width, sizes.height);
-renderer.setClearColor(0x292929); 
+renderer.setClearColor(0x2b2d42); 
 
 
 //Custom, random triangles using Buffer Geometry
 const geometry = new THREE.BufferGeometry();
 
-const count = 35; // Number of triangles
-const positionsArray = new Float32Array(count * 3 * 3);
+const count = 20; // Number of triangles
+const positionsArray = new Float32Array(count * 3 * 3); // 3 vertices per triangle, 3 coordinates per vertex
 
+// Randomly generate positions for each triangle
 for (let i = 0; i < count * 3 * 3; i++) {
     positionsArray[i] = (Math.random() - 0.5) * 4;
 }
 
+// Create a buffer attribute
 const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
 geometry.setAttribute('position', positionsAttribute);
 
-// Define colors for each face
+// Create a material
+const material = new THREE.MeshBasicMaterial({ color: 0x04E762, wireframe: true });
+
+
+// Define colors for each cube face
 const faceColors = [
-    0xff0000, // Red
-    0x00ff00, // Green
-    0x0000ff, // Blue
-    0xffff00, // Yellow
-    0xff00ff, // Magenta
-    0x00ffff  // Cyan
+    0xc7f9cc, // Front face
+    0xc7f9cc, // Back face
+    0xc0fdff, // Top face
+    0xc0fdff, // Bottom face
+    0xb8f2e6, // Right face
+    0xb8f2e6, // Left face
 ];
+
 
 // Create an array of materials
 const materials = faceColors.map(color => new THREE.MeshBasicMaterial({ color}));
 
-// Create geometry
-//const geometry = new THREE.BoxGeometry(1, 1, 1);
+// Create cube geometry
+// const geometry = new THREE.BoxGeometry(1, 1, 1);
 
 // Assign materials to each face
-for (let i = 0; i < geometry.groups.length; i++) {
+/* for (let i = 0; i < geometry.groups.length; i++) {
     geometry.groups[i].materialIndex = i;
-}
+} */
 
 // Create the mesh with the geometry and materials
-const mesh = new THREE.Mesh(geometry, materials);
+const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
-
-// Outline
-const edges = new THREE.EdgesGeometry(geometry);
-const lineMaterial = new THREE.LineBasicMaterial({ color: 0xccff66 });
-const outline = new THREE.LineSegments(edges, lineMaterial);
-scene.add(outline);
 
 // Orbit Controls
 const controls = new OrbitControls(camera, canvas);
@@ -115,7 +120,6 @@ const clock = new THREE.Clock();
 const tick = () => {
     const elapsedTime = clock.getElapsedTime();
     mesh.rotation.y = elapsedTime; //Rotate based on time
-    outline.rotation.y = elapsedTime; //Rotate based on time
     controls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
