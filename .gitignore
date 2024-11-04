@@ -37,6 +37,9 @@ build/
 .DS_Store
 *.swp
 *.swo
+*.tmp
+*.bak
+*.backup
 
 # Environment variables
 .env
@@ -48,6 +51,7 @@ build/
 .idea/
 *.sublime-project
 *.sublime-workspace
+*.code-workspace
 
 # Optional npm cache directory
 .npm/
@@ -63,3 +67,4 @@ build/
 
 # Windows specific files
 Thumbs.db
+desktop.ini
